@@ -43,6 +43,8 @@ void associate(vector<double> &vTimestampsRGB, vector<string> &vstrImageFilename
                vector<string> &vstrImageFilenamesD, vector<output> &association)
 {
     output Auxiliary;
+    int last_index_i = -1;
+    int last_index_j = -1;
     for (int i = 0; i < vstrImageFilenamesRGB.size(); ++i)
     {
         double min = 1;
@@ -63,12 +65,16 @@ void associate(vector<double> &vTimestampsRGB, vector<string> &vstrImageFilename
         }
         if (index_i ==-1 || index_j==-1)
             continue;
+        if (index_i == last_index_i || index_j == last_index_j)
+            continue;
         Auxiliary.vTimestampsRGB = vTimestampsRGB[index_i];
         Auxiliary.vstrImageFilenamesRGB = vstrImageFilenamesRGB[index_i];
         Auxiliary.vResultTxt= index_i+1;
         Auxiliary.vTimestampsD = vTimestampsD[index_j];
         Auxiliary.vstrImageFilenamesD = vstrImageFilenamesD[index_j];
         association.push_back(Auxiliary);
+        last_index_i = index_i;
+        last_index_j = index_j;
     }
 }
 
@@ -96,8 +102,8 @@ int main(int argc, char **argv)
     for (int i = 0; i <association.size() ; ++i)
     {
         inFile<< fixed;
-              inFile << setprecision(6) << association[i].vTimestampsRGB<< " " <<association[i].vstrImageFilenamesRGB<< " " <<
-              association[i].vTimestampsD << " " <<association[i].vstrImageFilenamesD << " " <<association[i].vResultTxt << ".txt" << "\n";
+        inFile << setprecision(6) << association[i].vTimestampsRGB<< " " <<association[i].vstrImageFilenamesRGB<< " " <<
+               association[i].vTimestampsD << " " <<association[i].vstrImageFilenamesD << " " <<association[i].vResultTxt << ".txt" << "\n";
     }
     return 0;
 }
